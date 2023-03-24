@@ -9,6 +9,7 @@ def arrow(func: Callable):
                 dic[item] = dic.get(item)
         return func(dic)
     return wrapper
+
 def number_filter(func: Callable):
     def wrapper(items):
         filter_items = []
@@ -21,8 +22,12 @@ def number_filter(func: Callable):
 
 
 def round_dict(func: Callable):
-    # write your code here
-    pass
+    def wrapper(filter_items):
+        round_items = []
+        for i in filter_items:
+            round_items.append(round(i))
+        return func(round_items)
+    return wrapper
 
 
 # Decorate this function with 3 decorators above in a correct order
@@ -30,8 +35,8 @@ def like_numbers(items: list) -> str:
     return f"I like to filter, rounding, doubling, store and decorate numbers: {', '.join(items)}!"
 
 #_______________________________________________________________________________________________________________
-
 @number_filter
+@round_dict
 def like_numbers(items: list):
     return f"I like to filter, rounding, doubling, " \
            f"store and decorate numbers: {', '.join(items)}!"
