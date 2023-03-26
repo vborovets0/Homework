@@ -1,49 +1,35 @@
-from typing import Callable
+class Point:
+    points = []
+
+    def __init__(self, x: int, y: int) -> None:
+        self.x = x
+        self.y = y
+        self.__class__.points.append(self)
+
+    @classmethod
+    def find_closest_point(cls):
+        if len(Point.points) <= 1:
+            return None
+        dic = {i: self.distance_to_point(i) for i in Point.points if i is not self}
+        #closest_point = min(dic, key=dic.values)
+        return dic
+    def distance_to_origin(self):
+        return (self.x ** 2 + self.y ** 2) ** 0.5
+
+    def distance_to_point(self, point2):
+        return round(((self.x - point2.x) ** 2 + (self.y - point2.y) ** 2) ** 0.5, 2)
+    def distance_to_x_axis(self):
+        return self.y
+
+    def distance_to_y_axis(self):
+        return self.x
 
 
-def arrow(func: Callable):
-    def wrapper(items):
-        dic = {}
-        for item in items:
-            if type(item) not in (list, set, dict):
-                dic[item] = dic.get(item)
-        return func(dic)
-    return wrapper
+point = Point(3, 4)
+point_2 = Point(-5, -1)
+point_3 = Point(4, 4)
+point_4 = Point(1, 1)
 
-def number_filter(func: Callable):
-    def wrapper(items):
-        filter_items = []
-        for item in items:
-            if type(item) in (int, float):
-                filter_items.append(item)
-        return func(filter_items)
-    return wrapper
+closest_point = point.find_closest_point()
 
-
-
-def round_dict(func: Callable):
-    def wrapper(filter_items):
-        round_items = []
-        for i in filter_items:
-            round_items.append(round(i))
-        return func(round_items)
-    return wrapper
-
-
-# Decorate this function with 3 decorators above in a correct order
-def like_numbers(items: list) -> str:
-    return f"I like to filter, rounding, doubling, store and decorate numbers: {', '.join(items)}!"
-
-#_______________________________________________________________________________________________________________
-@number_filter
-@round_dict
-def like_numbers(items: list):
-    return f"I like to filter, rounding, doubling, " \
-           f"store and decorate numbers: {', '.join(items)}!"
-
-items = ["35", 2.1, 4, 8.88, -123, "S", {"a", "b", 5}]
-
-like_numbers(items) # == "I like to filter, rounding, doubling, "
-#                        "store and decorate numbers: "
-#                        "2 -> 4, 4 -> 8, 9 -> 18, -123 -> -246!"
-
+print(point.points[0])
